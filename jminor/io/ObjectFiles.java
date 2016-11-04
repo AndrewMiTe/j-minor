@@ -181,8 +181,7 @@ public class ObjectFiles {
     }
 
     @Override // from ObjectStream
-    public void write(Path path) {
-      throw new UnsupportedOperationException("Not supported yet.");
+    public void write(Path path) throws IOException, ClassCastException {
     }
 
     @Override // from Stream
