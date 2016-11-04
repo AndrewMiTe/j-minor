@@ -139,12 +139,7 @@ public class Files {
         nextObject = input.readObject();
       }
       catch (IOException | ClassNotFoundException e) {
-        try {
-          input.close();
-        }
-        catch (IOException f) {
-          // Silient catch.
-        }
+        close();
       }
       return returnValue;
     }
