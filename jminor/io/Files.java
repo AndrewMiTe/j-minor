@@ -103,12 +103,7 @@ public class Files {
       }
       catch (IOException | ClassNotFoundException e) {
         nextObject = null;
-        try {
-          input.close();
-        }
-        catch (IOException f) {
-        // Silient catch.
-        }
+        close();
       }
     }
     
