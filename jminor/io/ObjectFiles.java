@@ -36,13 +36,12 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 /**
- * An expansion of the functionality found in the {@link java.nio.file.Files}
- * class, which is part of Java's NIO 2 API. Primarily this is the addition of
- * an {@link #objects(java.nio.file.Path) objects} method that returns a {@link
- * java.util.stream.Stream} of objects from the file located in the given path.
+ * Contains static methods for the manipulation of files using an object {@link
+ * java.util.stream.Stream}, as well as methods for additional manipulation of
+ * these streams.
  * @author Andrew M. Teller(https://github.com/AndrewMiTe)
  */
-public class Files {
+public class ObjectFiles {
   
   /**
    * Returns a stream of objects read from the given path. The file that the 
@@ -55,8 +54,7 @@ public class Files {
     ObjectFileIterator fileObjects = new ObjectFileIterator(path);
     return StreamSupport.stream(Spliterators.spliteratorUnknownSize(
         fileObjects, Spliterator.IMMUTABLE), false)
-        .onClose(fileObjects::close)
-    ;
+        .onClose(fileObjects::close);
   }
   
   /**
