@@ -36,31 +36,64 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 /**
- *
+ * An expansion of the functionality found in the {@link java.nio.file.Files}
+ * class, which is part of Java's NIO 2 API. Primarily this is the addition of
+ * an {@link #objects(java.nio.file.Path) objects} method that returns a {@link
+ * java.util.stream.Stream} of objects from the file located in the given path.
  * @author Andrew M. Teller(https://github.com/AndrewMiTe)
  */
 public class Files {
   
-  public static final Stream<Object> objects(Path path) throws IOException {
+  /**
+   * Returns a stream of objects read from the given path. The file that the 
+   * path points to is not opened when the stream is made, but rather the
+   * resource is only accessed when a terminal method is called on the stream. 
+   * @param path path to the file to read object from.
+   * @return stream of objects read from a file.
+   */
+  public static final Stream<Object> objects(Path path) {
     ObjectFileIterator fileObjects = new ObjectFileIterator(path);
     return StreamSupport.stream(Spliterators.spliteratorUnknownSize(
         fileObjects, Spliterator.IMMUTABLE), false)
-        .onClose(() -> fileObjects.close())
+        .onClose(fileObjects::close)
     ;
   }
   
+  /**
+   * Delivers the next object to be read from a file as the calling object
+   * iterates over it. Any excretions to result from erroneous access to the
+   * given path will be silently ignored by this object, generally resulting in
+   * the next object being {@code null}.
+   */
   private static class ObjectFileIterator implements Iterator<Object> {
 
+    /**
+     * Input stream from which the objects are read from.
+     */
     private ObjectInputStream input = null;
     
-    private Path path;
+    /**
+     * Path to the file to be read.
+     */
+    private final Path path;
     
+    /**
+     * Object read from the file that is next in the iteration.
+     */
     private Object nextObject = null;
 
+    /**
+     * Initializes the object with the path of the assumed file to be read.
+     * @param path 
+     */
     public ObjectFileIterator(Path path) {
       this.path = path;
     }
     
+    /**
+     * Opens the file to be read. Silently ignores any exceptions from erroneous
+     * access to the file.
+     */
     private void openInput() {
       try {
         FileInputStream fileIn = new FileInputStream(path.toFile());
@@ -74,15 +107,21 @@ public class Files {
           input.close();
         }
         catch (IOException f) {
+        // Silient catch.
         }
       }
     }
     
+    /**
+     * Opens the file to be read. Silently ignores any exceptions from erroneous
+     * access to the file.
+     */
     public void close() {
       try {
         input.close();
       }
-      catch (IOException e) {        
+      catch (IOException e) {     
+        // Silient catch.
       }
     }
     
@@ -104,6 +143,7 @@ public class Files {
           input.close();
         }
         catch (IOException f) {
+          // Silient catch.
         }
       }
       return returnValue;
