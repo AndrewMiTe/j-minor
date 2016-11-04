@@ -24,6 +24,7 @@
 
 package jminor.io;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
@@ -33,6 +34,6 @@ import java.util.stream.Stream;
  */
 public interface ObjectStream extends Stream<Object> {
   
-  void write(Path path);
+  void write(Path path) throws IOException, ClassCastException;
   
 }
