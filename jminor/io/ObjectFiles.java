@@ -25,9 +25,12 @@
 package jminor.io;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -45,6 +48,8 @@ import java.util.function.Supplier;
 import java.util.function.ToDoubleFunction;
 import java.util.function.ToIntFunction;
 import java.util.function.ToLongFunction;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collector;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
@@ -172,6 +177,8 @@ public class ObjectFiles {
      */    
     private Stream<Object> stream;
     
+    IOException savedException = null;
+
     /**
      * Initializes with the given Stream object to be wrapped.
      * @param stream 
@@ -181,7 +188,22 @@ public class ObjectFiles {
     }
 
     @Override // from ObjectStream
-    public void write(Path path) throws IOException, ClassCastException {
+    public void write(Path path) throws IOException {
+      try (ObjectOutputStream output = new ObjectOutputStream(
+          new BufferedOutputStream(new FileOutputStream(path.toFile())))) {
+        stream.forEach(o -> {
+          try {
+            output.writeObject(o);
+          } catch (IOException ex) {
+            if (savedException == null) savedException = ex;
+          }
+        });
+      }
+      if (savedException != null) {
+        IOException ex = savedException;
+        savedException = null;
+        throw ex;
+      }
     }
 
     @Override // from Stream
