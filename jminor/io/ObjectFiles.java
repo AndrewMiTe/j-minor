@@ -138,7 +138,7 @@ public class ObjectFiles {
      */
     public void close() {
       try {
-        input.close();
+        if (input != null) input.close();
       }
       catch (IOException e) {     
         // Silient catch.
