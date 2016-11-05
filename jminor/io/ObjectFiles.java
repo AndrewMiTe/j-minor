@@ -207,7 +207,7 @@ public class ObjectFiles {
     }
 
     @Override // from Stream
-    public Stream<Object> filter(Predicate<? super Object> predicate) {
+    public ObjectStream filter(Predicate<? super Object> predicate) {
       stream = stream.filter(predicate);
       return this;
     }
@@ -253,25 +253,25 @@ public class ObjectFiles {
     }
 
     @Override // from Stream
-    public Stream<Object> distinct() {
+    public ObjectStream distinct() {
       stream = stream.distinct();
       return this;
     }
 
     @Override // from Stream
-    public Stream<Object> sorted() {
+    public ObjectStream sorted() {
       stream = stream.sorted();
       return this;
     }
 
     @Override // from Stream
-    public Stream<Object> sorted(Comparator<? super Object> comparator) {
+    public ObjectStream sorted(Comparator<? super Object> comparator) {
       stream = stream.sorted(comparator);
       return this;
     }
 
     @Override // from Stream
-    public Stream<Object> peek(Consumer<? super Object> action) {
+    public ObjectStream peek(Consumer<? super Object> action) {
       stream = stream.peek(action);
       return this;
     }
@@ -283,7 +283,7 @@ public class ObjectFiles {
     }
 
     @Override // from Stream
-    public Stream<Object> skip(long n) {
+    public ObjectStream skip(long n) {
       stream = stream.skip(n);
       return this;
     }
@@ -389,25 +389,25 @@ public class ObjectFiles {
     }
 
     @Override // from Stream
-    public Stream<Object> sequential() {
+    public ObjectStream sequential() {
       stream = stream.sequential();
       return this;
     }
 
     @Override // from Stream
-    public Stream<Object> parallel() {
+    public ObjectStream parallel() {
       stream = stream.parallel();
       return this;
     }
 
     @Override // from Stream
-    public Stream<Object> unordered() {
+    public ObjectStream unordered() {
       stream = stream.unordered();
       return this;
     }
 
     @Override // from Stream
-    public Stream<Object> onClose(Runnable closeHandler) {
+    public ObjectStream onClose(Runnable closeHandler) {
       stream = stream.onClose(closeHandler);
       return this;
     }
