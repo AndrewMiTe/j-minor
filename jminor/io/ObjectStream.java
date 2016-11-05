@@ -34,6 +34,6 @@ import java.util.stream.Stream;
  */
 public interface ObjectStream extends Stream<Object> {
   
-  void write(Path path) throws IOException, ClassCastException;
+  void write(Path path) throws IOException;
   
 }
