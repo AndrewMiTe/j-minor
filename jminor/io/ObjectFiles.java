@@ -72,11 +72,12 @@ public class ObjectFiles {
    * @param path path to the file to read object from.
    * @return stream of objects read from a file.
    */
-  public static final Stream<Object> objects(Path path) {
+  public static final ObjectStream objects(Path path) {
     ObjectFileIterator fileObjects = new ObjectFileIterator(path);
-    return StreamSupport.stream(Spliterators.spliteratorUnknownSize(
-        fileObjects, Spliterator.IMMUTABLE), false)
-        .onClose(fileObjects::close);
+    return toObjectStream(StreamSupport.stream(
+        Spliterators.spliteratorUnknownSize(
+        fileObjects, Spliterator.IMMUTABLE) , false)
+        .onClose(fileObjects::close));
   }
   
   public static final ObjectStream toObjectStream(Stream<Object> stream) {
