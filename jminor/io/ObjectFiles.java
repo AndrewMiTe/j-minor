@@ -1,4 +1,4 @@
-/*
+/*  
  * MIT License
  *
  * Copyright (c) 2016 Andrew Michael Teller(https://github.com/AndrewMiTe)
@@ -48,8 +48,6 @@ import java.util.function.Supplier;
 import java.util.function.ToDoubleFunction;
 import java.util.function.ToIntFunction;
 import java.util.function.ToLongFunction;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collector;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
@@ -82,6 +80,18 @@ public class ObjectFiles {
   
   public static final ObjectStream toObjectStream(Stream<Object> stream) {
     return new ObjectStreamWrapper(stream);
+  }
+
+  public static boolean append(Path path, Object input) {
+    try (FileOutputStream fileIn = new FileOutputStream(path.toFile(), true);
+        BufferedOutputStream bufferedIn = new BufferedOutputStream(fileIn);
+        ObjectOutputStream output = new ObjectOutputStream(bufferedIn)) {
+      output.writeObject(input);
+      return true;
+    }
+    catch (IOException e) {
+      return false;
+    }
   }
 
   /**
@@ -417,6 +427,7 @@ public class ObjectFiles {
     public void close() {
       stream.close();
     }
+    
   }
   
 }
