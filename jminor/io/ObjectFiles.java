@@ -26,6 +26,7 @@ package jminor.io;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -82,11 +83,11 @@ public class ObjectFiles {
     return new ObjectStreamWrapper(stream);
   }
 
-  public static boolean append(Path path, Object input) {
-    try (FileOutputStream fileIn = new FileOutputStream(path.toFile(), true);
-        BufferedOutputStream bufferedIn = new BufferedOutputStream(fileIn);
-        ObjectOutputStream output = new ObjectOutputStream(bufferedIn)) {
-      output.writeObject(input);
+  public static boolean write(Path path, Object... input) {
+    try (ObjectOutputStream out = new ObjectOutputStream(
+         new BufferedOutputStream(
+         new FileOutputStream(path.toFile())))) {
+      for (Object o : input) out.writeObject(o);
       return true;
     }
     catch (IOException e) {
@@ -94,6 +95,31 @@ public class ObjectFiles {
     }
   }
 
+  // @todo javadoc
+  // @todo might be the problem with there being only one object.
+  public static boolean append(Path path, Object input) {
+    try (ObjectOutputStream out = new AppendObjectOutputStream(path.toFile())) {
+      out.writeObject(input);
+      return true;
+    }
+    catch (IOException e) {
+      return false;
+    }
+  }
+
+  private static class AppendObjectOutputStream extends ObjectOutputStream {
+    
+    public AppendObjectOutputStream(File file) throws IOException {
+      super(new BufferedOutputStream(new FileOutputStream(file, true)));
+    }
+    
+    @Override // from ObjectOutputStream
+    protected void writeStreamHeader() throws IOException {
+      reset();
+    }
+    
+  }
+  
   /**
    * Delivers the next object to be read from a file as the calling object
    * iterates over it. Any exceptions to result from erroneous access to the
