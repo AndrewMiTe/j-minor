@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package jminor.io;
+package io;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
