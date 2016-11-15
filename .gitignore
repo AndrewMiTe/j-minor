@@ -1,5 +1,13 @@
 
-# Created by https://www.gitignore.io/api/java,gradle
+# Created by https://www.gitignore.io/api/java,netbeans,gradle
+
+### NetBeans ###
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
 
 
 ### Java ###
