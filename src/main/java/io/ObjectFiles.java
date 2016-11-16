@@ -79,15 +79,26 @@ public class ObjectFiles {
         .onClose(fileObjects::close));
   }
   
+  /**
+   * Wraps a Stream of objects into an ObjectStream.
+   * @param stream the stream to be wrapped.
+   * @return wrapped stream.
+   */
   public static final ObjectStream toObjectStream(Stream<Object> stream) {
     return new ObjectStreamWrapper(stream);
   }
 
-  public static boolean write(Path path, Object... input) {
+  /**
+   * Writes a list of objects to a file form the given path.
+   * @param path path to the file to be written to.
+   * @param objects objects to write.
+   * @return {@code true} if the objects were written to the file without issue.
+   */
+  public static boolean write(Path path, Object... objects) {
     try (ObjectOutputStream out = new ObjectOutputStream(
          new BufferedOutputStream(
          new FileOutputStream(path.toFile())))) {
-      for (Object o : input) out.writeObject(o);
+      for (Object o : objects) out.writeObject(o);
       return true;
     }
     catch (IOException e) {
@@ -95,11 +106,17 @@ public class ObjectFiles {
     }
   }
 
-  // @todo javadoc
-  // @todo might be the problem with there being only one object.
-  public static boolean append(Path path, Object input) {
+  /**
+   * Appends an object to a file specified by the given {@link Path} object.
+   * Will create an improperly configured file if used to append to an empty or
+   * nonexistent file.
+   * @param path path to the file to append.
+   * @param object object to append.
+   * @return {@code true} if the object was written to the file without issue.
+   */
+  public static boolean append(Path path, Object object) {
     try (ObjectOutputStream out = new AppendObjectOutputStream(path.toFile())) {
-      out.writeObject(input);
+      out.writeObject(object);
       return true;
     }
     catch (IOException e) {
@@ -107,8 +124,18 @@ public class ObjectFiles {
     }
   }
 
+  /**
+   * An output stream that is buffered and appends to a given file, with the
+   * option to append serialized objects. Will create an improperly configured
+   * file if used to append to an empty or nonexistent file.
+   */  
   private static class AppendObjectOutputStream extends ObjectOutputStream {
     
+    /**
+     * Initializes with the file to append to.
+     * @param file file to append.
+     * @throws IOException if the file resource fails to be accessed.
+     */
     public AppendObjectOutputStream(File file) throws IOException {
       super(new BufferedOutputStream(new FileOutputStream(file, true)));
     }

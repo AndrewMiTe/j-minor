@@ -29,11 +29,19 @@ import java.nio.file.Path;
 import java.util.stream.Stream;
 
 /**
- *
+ * A stream that allows for the objects to be written to a file as a terminal
+ * operation.
  * @author Andrew M. Teller(https://github.com/AndrewMiTe)
  */
 public interface ObjectStream extends Stream<Object> {
   
+  /**
+   * Writes the output of the stream to the file of the given path.
+   * <p>This is a <a href="package-summary.html#StreamOps">terminal operation</a>.
+   * @param path path to write to.
+   * @throws IOException if the file cannot be accessed or if the file fails to
+   *         be written to.
+   */
   void write(Path path) throws IOException;
   
 }
